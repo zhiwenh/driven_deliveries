@@ -23,6 +23,7 @@ export default class CheckerBoard extends Component {
             rowIndex={this.props.rowIndex}
             columnIndex={this.props.columnIndex}
             movePiece1={this.props.movePiece1}
+            checkersLocation={this.props.checkersLocation}
           />
         </div>
       )
@@ -33,6 +34,7 @@ export default class CheckerBoard extends Component {
             rowIndex={this.props.rowIndex}
             columnIndex={this.props.columnIndex}
             movePiece1={this.props.movePiece1}
+            checkersLocation={this.props.checkersLocation}
           />
         </div>
       )
