@@ -12,15 +12,22 @@ export default class Home extends Component {
       pieceToMove: [undefined, undefined, undefined],
       isMovingPiece: false,
       turn: 1
-    };
+    }
 
     this.state.checkersLocation = this.checkersLocation(8);
 
     this.submitCheckerBoardInput = this.submitCheckerBoardInput.bind(this);
     this.movePiece1 = this.movePiece1.bind(this);
     this.movePiece2 = this.movePiece2.bind(this);
+    this.save = this.save.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
+  componentDidMount() {
+    const savedState = JSON.parse(localStorage.getItem('savedGame'));
+    this.setState(savedState);
+
+  }
   // Creates the locations of the checkers pieces in a matrix
   checkersLocation(checkerBoardInput) {
     const checkersLocation = [];
@@ -38,6 +45,20 @@ export default class Home extends Component {
     }
 
     return checkersLocation;
+  }
+
+  save() {
+    localStorage.setItem('savedGame', JSON.stringify(this.state));
+  }
+
+  reset() {
+    localStorage.removeItem('savedGame');
+    this.setState({
+      pieceToMove: [undefined, undefined, undefined],
+      isMovingPiece: false,
+      turn: 1,
+      checkersLocation: this.checkersLocation(this.state.checkerBoardInput)
+    })
   }
 
   submitCheckerBoardInput(newCheckerBoardInput, e) {
@@ -92,7 +113,6 @@ export default class Home extends Component {
     }
 
     if (player === '2') {
-      console.log('here5');
       if (checkersLocation[oldPieceRow - 1][oldPieceColumn - 1] === '') {
         checkersLocation[Number(oldPieceRow) - 1][Number(oldPieceColumn) - 1] = 'suggested';
       }
@@ -127,11 +147,9 @@ export default class Home extends Component {
     }
 
     if (this.state.pieceToMove[0] === '1') {
-      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1]);
       if (checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1] === 'suggested') {
         checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1] = '';
       }
-      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1]);
       if (checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1] === 'suggested') {
         checkersLocation[Number(this.state.pieceToMove[1])  + 1][Number(this.state.pieceToMove[2]) - 1] = '';
       }
@@ -141,7 +159,6 @@ export default class Home extends Component {
       if (checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) - 1] === 'suggested') {
         checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) - 1] = '';
       }
-      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1]);
       if (checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) + 1] === 'suggested') {
         checkersLocation[Number(this.state.pieceToMove[1])  - 1][Number(this.state.pieceToMove[2]) + 1] = '';
       }
@@ -165,6 +182,8 @@ export default class Home extends Component {
               checkerBoardInput={this.state.checkerBoardInput}
               submitCheckerBoardInput={this.submitCheckerBoardInput}
             />
+            <button onClick={this.save}>Save</button>
+            <button onClick={this.reset}>Reset</button>
           </div>
           <CheckerBoard
             checkerBoardInput={this.state.checkerBoardInput}
