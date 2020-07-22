@@ -10,9 +10,11 @@ export default class RedCircle extends Component {
   }
 
   onClick() {
-    console.log('here5');
-
-    this.props.movePiece1('1', this.props.rowIndex, this.props.columnIndex);
+    if (this.props.checkersLocation[this.props.rowIndex][this.props.columnIndex].moving === false) {
+      this.props.movePiece1('1', this.props.rowIndex, this.props.columnIndex);
+    } else {
+      this.props.movePiece1('1', this.props.rowIndex, this.props.columnIndex);
+    }
   }
 
   render() {
@@ -26,10 +28,9 @@ export default class RedCircle extends Component {
       height: 10
     };
 
-    if (this.props.checkersLocation[this.props.rowIndex][this.props.columnIndex] === true) {
+    if (this.props.checkersLocation[this.props.rowIndex][this.props.columnIndex].moving === true) {
       circleStyle['border'] = '3px solid yellow';
     }
-
 
     return (
       <div style={circleStyle} onClick={() => this.onClick()}>

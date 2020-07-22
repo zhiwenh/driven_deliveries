@@ -10,13 +10,10 @@ export default class Home extends Component {
     this.state = {
       checkerBoardInput: 8,
       pieceToMove: [undefined, undefined, undefined],
-      isMovingPiece: false,
-      currentlyMoving: [undefined, undefined]
+      isMovingPiece: false
     };
 
     this.state.checkersLocation = this.checkersLocation(8);
-
-    console.log(this.state.checkersLocation);
 
     this.submitCheckerBoardInput = this.submitCheckerBoardInput.bind(this);
     this.movePiece1 = this.movePiece1.bind(this);
@@ -34,12 +31,11 @@ export default class Home extends Component {
         } else if (i === checkerBoardInput - 1 || i === checkerBoardInput - 2){
           checkersLocation[i].push({player: '2', moving: false});
         } else {
-          checkersLocation[i].push({player: undefined, moving: undefined});
+          checkersLocation[i].push('');
         }
       }
     }
 
-    console.log(checkersLocation);
     return checkersLocation;
   }
 
@@ -55,15 +51,28 @@ export default class Home extends Component {
 
   // Click on the checkers piece
   movePiece1(player, oldPieceRow, oldPieceColumn) {
-    if (this.state.currentlyMoving[0] !== undefined && this.state.currentlyMoving[1] !== undefined) {
+    const checkersLocation = this.state.checkersLocation.slice();
+
+    if (this.state.pieceToMove[1] === oldPieceRow && this.state.pieceToMove[2] === oldPieceColumn) {
+      checkersLocation[oldPieceRow][oldPieceColumn].moving = false;
+      this.setState({
+        pieceToMove: [undefined, undefined, undefined],
+        isMovingPiece: false,
+        checkersLocation: checkersLocation
+      });
       return;
     }
 
-    const checkersLocation = this.state.checkersLocation.slice();
+    if (this.state.isMovingPiece === true) {
+      return;
+    }
+
+    console.log(checkersLocation[oldPieceRow][oldPieceColumn].moving);
+    const pieceToMove = [player, oldPieceRow, oldPieceColumn];
     checkersLocation[oldPieceRow][oldPieceColumn].moving = true;
 
-    const pieceToMove = [player, oldPieceRow, oldPieceColumn];
 
+    console.log('pieceToMove', pieceToMove);
     this.setState({
       pieceToMove: pieceToMove,
       isMovingPiece: true,
@@ -73,7 +82,9 @@ export default class Home extends Component {
 
   movePiece2(newPieceRow, newPieceColumn) {
     if (this.state.isMovingPiece === false) return;
+
     const checkersLocation = this.state.checkersLocation.slice();
+
     if (checkersLocation[newPieceRow][newPieceColumn] !== '') {
       console.log('Piece there already');
       return;
@@ -81,7 +92,7 @@ export default class Home extends Component {
 
     console.log('here3');
     checkersLocation[this.state.pieceToMove[1]][this.state.pieceToMove[2]] = '';
-    checkersLocation[newPieceRow][newPieceColumn] = this.state.pieceToMove[0];
+    checkersLocation[newPieceRow][newPieceColumn] = {player: this.state.pieceToMove[0], moving: false};
 
     this.setState({
       checkersLocation: checkersLocation,
