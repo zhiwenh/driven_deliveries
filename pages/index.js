@@ -10,7 +10,8 @@ export default class Home extends Component {
     this.state = {
       checkerBoardInput: 8,
       pieceToMove: [undefined, undefined, undefined],
-      isMovingPiece: false
+      isMovingPiece: false,
+      turn: 1
     };
 
     this.state.checkersLocation = this.checkersLocation(8);
@@ -51,10 +52,20 @@ export default class Home extends Component {
 
   // Click on the checkers piece
   movePiece1(player, oldPieceRow, oldPieceColumn) {
+    if (Number(player) !== this.state.turn) return;
+
     const checkersLocation = this.state.checkersLocation.slice();
 
     if (this.state.pieceToMove[1] === oldPieceRow && this.state.pieceToMove[2] === oldPieceColumn) {
       checkersLocation[oldPieceRow][oldPieceColumn].moving = false;
+      if (checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) + 1] === 'suggested') {
+        checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) + 1] = '';
+      }
+
+      if (checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) - 1] === 'suggested') {
+        checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) - 1] = '';
+      }
+
       this.setState({
         pieceToMove: [undefined, undefined, undefined],
         isMovingPiece: false,
@@ -67,16 +78,42 @@ export default class Home extends Component {
       return;
     }
 
-    console.log(checkersLocation[oldPieceRow][oldPieceColumn].moving);
     const pieceToMove = [player, oldPieceRow, oldPieceColumn];
     checkersLocation[oldPieceRow][oldPieceColumn].moving = true;
 
+    if (player === '1') {
+      if (checkersLocation[oldPieceRow + 1][oldPieceColumn + 1] === '') {
+        checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) + 1] = 'suggested';
+      }
 
-    console.log('pieceToMove', pieceToMove);
+      if (checkersLocation[oldPieceRow + 1][oldPieceColumn - 1] === '') {
+        checkersLocation[Number(oldPieceRow) + 1][Number(oldPieceColumn) - 1] = 'suggested';
+      }
+    }
+
+    if (player === '2') {
+      console.log('here5');
+      if (checkersLocation[oldPieceRow - 1][oldPieceColumn - 1] === '') {
+        checkersLocation[Number(oldPieceRow) - 1][Number(oldPieceColumn) - 1] = 'suggested';
+      }
+
+      if (checkersLocation[oldPieceRow - 1][oldPieceColumn + 1] === '') {
+        checkersLocation[Number(oldPieceRow) - 1][Number(oldPieceColumn) + 1] = 'suggested';
+      }
+    }
+    let turn = this.state.turn;
+
+    if (turn === 1) {
+      turn = 2;
+    } else {
+      turn = 1
+    }
+
     this.setState({
       pieceToMove: pieceToMove,
       isMovingPiece: true,
-      checkersLocation: checkersLocation
+      checkersLocation: checkersLocation,
+      turn: turn
     });
   }
 
@@ -85,12 +122,31 @@ export default class Home extends Component {
 
     const checkersLocation = this.state.checkersLocation.slice();
 
-    if (checkersLocation[newPieceRow][newPieceColumn] !== '') {
-      console.log('Piece there already');
+    if (checkersLocation[newPieceRow][newPieceColumn] !== '' && checkersLocation[newPieceRow][newPieceColumn] !== 'suggested') {
       return;
     }
 
-    console.log('here3');
+    if (this.state.pieceToMove[0] === '1') {
+      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1]);
+      if (checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1] === 'suggested') {
+        checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) + 1] = '';
+      }
+      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1]);
+      if (checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1] === 'suggested') {
+        checkersLocation[Number(this.state.pieceToMove[1])  + 1][Number(this.state.pieceToMove[2]) - 1] = '';
+      }
+    }
+
+    if (this.state.pieceToMove[0] === '2') {
+      if (checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) - 1] === 'suggested') {
+        checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) - 1] = '';
+      }
+      console.log(checkersLocation[Number(this.state.pieceToMove[1]) + 1][Number(this.state.pieceToMove[2]) - 1]);
+      if (checkersLocation[Number(this.state.pieceToMove[1]) - 1][Number(this.state.pieceToMove[2]) + 1] === 'suggested') {
+        checkersLocation[Number(this.state.pieceToMove[1])  - 1][Number(this.state.pieceToMove[2]) + 1] = '';
+      }
+    }
+
     checkersLocation[this.state.pieceToMove[1]][this.state.pieceToMove[2]] = '';
     checkersLocation[newPieceRow][newPieceColumn] = {player: this.state.pieceToMove[0], moving: false};
 
@@ -98,10 +154,6 @@ export default class Home extends Component {
       checkersLocation: checkersLocation,
       isMovingPiece: false
     });
-  }
-
-  movePiece(player, oldPieceRow, oldPieceColumn, newPieceRow, newPieceColumn) {
-
   }
 
   render() {

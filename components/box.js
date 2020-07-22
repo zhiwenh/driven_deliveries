@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RedCircle from './redCircle';
 import BlackCircle from './blackCircle';
+import BlueCircle from './blueCircle';
 
 export default class CheckerBoard extends Component {
   constructor(props) {
@@ -10,9 +11,7 @@ export default class CheckerBoard extends Component {
   }
 
   onClick(e) {
-    console.log('here4');
-    console.log(this.props);
-    this.props.movePiece2(this.props.rowIndex, this.props.columnIndex);
+    // this.props.movePiece2(this.props.rowIndex, this.props.columnIndex);
   }
 
   render() {
@@ -38,8 +37,19 @@ export default class CheckerBoard extends Component {
           />
         </div>
       )
+    } else if (this.props.checkersLocation[this.props.rowIndex][this.props.columnIndex] === 'suggested') {
+      return (
+        <div>
+          <BlueCircle
+            rowIndex={this.props.rowIndex}
+            columnIndex={this.props.columnIndex}
+            movePiece1={this.props.movePiece1}
+            movePiece2={this.props.movePiece2}
+            checkersLocation={this.props.checkersLocation}
+          />
+        </div>
+      )
     } else {
-      console.log('here1');
       return (
         <div style={{width: 65, height: 65}} onClick={(e) => this.onClick()}>
         </div>
