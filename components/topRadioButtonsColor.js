@@ -25,23 +25,23 @@ export default class ButtonRadioButtonsColor extends Component {
   render() {
     return (
       <form>
-        Player 2 Checker Color
+        Player 1 Checker Color
         <div className="radio">
           <label>
             <input type="radio" checked={this.state.button1} onClick = {(e) => this.onClick(1, e)}/>
-            Cyan
+            Blue
           </label>
         </div>
         <div className="radio">
           <label>
             <input type="radio" checked={this.state.button2} onClick = {(e) => this.onClick(2, e)}/>
-            Brown
+            Orange
           </label>
         </div>
         <div className="radio">
           <label>
             <input type="radio" checked={this.state.button3} onClick = {(e) => this.onClick(3, e)}/>
-            Gray
+            Green
           </label>
         </div>
       </form>

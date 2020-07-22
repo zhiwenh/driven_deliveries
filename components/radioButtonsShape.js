@@ -10,7 +10,7 @@ export default class ButtonRadioButtonsColor extends Component {
     }
   }
 
-  onClick (buttonNumber) {
+  onClick (buttonNumber, e) {
     const button = 'button' + buttonNumber;
     const newState = {};
     if (this.state[button] === false) {
@@ -18,6 +18,7 @@ export default class ButtonRadioButtonsColor extends Component {
     } else {
       newState[button] = false;
     }
+    this.props.changeShape(e.target.value);
 
     this.setState(newState);
   }
@@ -25,23 +26,23 @@ export default class ButtonRadioButtonsColor extends Component {
   render() {
     return (
       <form>
-        Player 2 Checker Color
+        Checker Shape
         <div className="radio">
           <label>
-            <input type="radio" checked={this.state.button1} onClick = {(e) => this.onClick(1, e)}/>
-            Cyan
+            <input type="radio" value="square" checked={this.state.button1} onClick = {(e) => this.onClick(1, e)}/>
+            Square
           </label>
         </div>
         <div className="radio">
           <label>
-            <input type="radio" checked={this.state.button2} onClick = {(e) => this.onClick(2, e)}/>
-            Brown
+            <input type="radio" value="triangle" checked={this.state.button2} onClick = {(e) => this.onClick(2, e)}/>
+            Triangle
           </label>
         </div>
         <div className="radio">
           <label>
-            <input type="radio" checked={this.state.button3} onClick = {(e) => this.onClick(3, e)}/>
-            Gray
+            <input type="radio" value="pentagon" checked={this.state.button3} onClick = {(e) => this.onClick(3, e)}/>
+            Pentagon
           </label>
         </div>
       </form>

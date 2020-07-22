@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import CheckerBoard from '../components/checkerBoard'
 import CheckerBoardInput from '../components/checkerBoardInput'
-import ButtonRadioButtonsColor from '../components/bottomRadioButtonsColor'
+import RadioButtonsShape from '../components/radioButtonsShape'
+import TopRadioButtonsColor from '../components/topRadioButtonsColor'
+import BottomRadioButtonsColor from '../components/bottomRadioButtonsColor'
 
 export default class Home extends Component {
   constructor(props) {
@@ -11,7 +13,10 @@ export default class Home extends Component {
       checkerBoardInput: 8,
       pieceToMove: [undefined, undefined, undefined],
       isMovingPiece: false,
-      turn: 1
+      turn: 1,
+      shape: 'circle',
+      topColor: 'red',
+      bottomColor: 'black'
     }
 
     this.state.checkersLocation = this.checkersLocation(8);
@@ -21,6 +26,10 @@ export default class Home extends Component {
     this.movePiece2 = this.movePiece2.bind(this);
     this.save = this.save.bind(this);
     this.reset = this.reset.bind(this);
+    this.changeShape = this.changeShape.bind(this);
+    this.topColor = this.topColor.bind(this);
+    this.bottomColor = this.bottomColor.bind(this);
+
   }
 
   componentDidMount() {
@@ -59,6 +68,24 @@ export default class Home extends Component {
       turn: 1,
       checkersLocation: this.checkersLocation(this.state.checkerBoardInput)
     })
+  }
+
+  changeShape(shape) {
+    this.setState({
+      shape: shape
+    });
+  }
+
+  topColor(color) {
+    this.setState({
+      topColor: color
+    });
+  }
+
+  bottomColor(color) {
+    this.setState({
+      bottomColor: color
+    });
   }
 
   submitCheckerBoardInput(newCheckerBoardInput, e) {
@@ -182,8 +209,19 @@ export default class Home extends Component {
               checkerBoardInput={this.state.checkerBoardInput}
               submitCheckerBoardInput={this.submitCheckerBoardInput}
             />
-            <button onClick={this.save}>Save</button>
-            <button onClick={this.reset}>Reset</button>
+            <div>
+              <button onClick={this.save}>Save</button>
+              <button onClick={this.reset}>Reset</button>
+            </div>
+            <div>
+              <RadioButtonsShape changeShape={this.changeShape}/>
+            </div>
+            <div>
+              <TopRadioButtonsColor topColor={this.topColor}/>
+            </div>
+            <div>
+              <BottomRadioButtonsColor bottomColor={this.bottomColor}/>
+            </div>
           </div>
           <CheckerBoard
             checkerBoardInput={this.state.checkerBoardInput}
